@@ -34,26 +34,29 @@ export function validateUser(userData) {
   };
 }
 
-export function validateUserUpdate(userData) {
+export function validateUpdateUser(userData) {
   const errors = {};
+  const data = {};
 
-  const email = userData.email;
-  const password = userData.password;
-  const name = userData.name;
+  if (userData.email !== undefined) {
+    if (!isEmail(userData.email)) errors.email = "Email is invalid";
+    else data.email = userData.email;
+  }
 
-  if (email !== undefined && !isEmail(email)) {
-    errors.email = "Email is invalid";
+  if (userData.password !== undefined) {
+    if (!isStrongPassword(userData.password))
+      errors.password = "Password must be at least 8 characters long.";
+    else data.password = userData.password;
   }
-  if (password !== undefined && !isStrongPassword(password)) {
-    errors.password = "Password must be at least 8 characters long";
-  }
-  if (name !== undefined && !isNonEmptyString(name)) {
-    errors.name = "Name must be a non-empty string";
+
+  if (userData.name !== undefined) {
+    if (!isNonEmptyString(userData.name)) errors.name = "Name is required";
+    else data.name = userData.name;
   }
 
   return {
-    isValid: Object.keys(errors).length === 0,
+    ok: Object.keys(errors).length === 0,
     errors,
-    data: userData,
+    data,
   };
 }
