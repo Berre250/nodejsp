@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import usersRoutes from "./users/users.route.js";
 
 dotenv.config();
 
@@ -11,6 +12,8 @@ app.get("/", (req, res) => {
   });
 });
 const port = process.env.PORT || 3000;
+app.use(express.json());
+app.use("/users", usersRoutes);
 
 app.listen(3000, () => {
   console.log("Server running at http://127.0.0.1:3000/");
